@@ -17,7 +17,9 @@ if ! security list-keychains -d user > "$work/original-keychains.txt"; then
   exit 1
 fi
 python3 -c 'import shlex,sys; print("\n".join(shlex.split(open(sys.argv[1]).read())))' "$work/original-keychains.txt" > "$work/keychain-paths.txt"
-while IFS= read -r item; do [[ -n "$item" ]] && original_keychains+=("$item"); done < "$work/keychain-paths.txt"
+while IFS= read -r item; do
+  if [[ -n "$item" ]]; then original_keychains+=("$item"); fi
+done < "$work/keychain-paths.txt"
 installed_profiles=()
 cleanup() {
   local status=$?
