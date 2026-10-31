@@ -7,8 +7,8 @@
     <key>CFBundleName</key><string>$(PRODUCT_NAME)</string>
     <key>CFBundlePackageType</key><string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
     <key>CFBundleDisplayName</key><string>ReadingCoach</string>
-    <key>CFBundleVersion</key><string>1</string>
-    <key>CFBundleShortVersionString</key><string>0.1.0</string>
+    <key>CFBundleVersion</key><string>$(CURRENT_PROJECT_VERSION)</string>
+    <key>CFBundleShortVersionString</key><string>$(MARKETING_VERSION)</string>
     <key>ReadingCoachAppGroupIdentifier</key><string>$(READINGCOACH_APP_GROUP)</string>
     <key>NSExtension</key><dict>
         <key>NSExtensionPointIdentifier</key><string>com.apple.share-services</string>

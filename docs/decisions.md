@@ -52,3 +52,26 @@ Generated practice has a separate `practice:` identity and answer path. It is
 never fed to the source resolver as stored original text. Word counts and their
 method version are saved when a reading run is explicitly completed; later
 assisted or rereading activity cannot change that run's numerator or time.
+
+## iPhone delivery without a Mac
+
+The user chose paid Apple Developer enrollment and cloud builds/TestFlight.
+Distribution is internal TestFlight only; it is not an App Store release.
+The new manual workflow runs unsigned Simulator tests by default. Signed builds
+and uploads are explicit inputs, with signing secrets confined to the GitHub
+`testflight` environment and upload credentials confined to the upload step.
+
+Manual Apple Distribution certificates/profiles are the documented baseline.
+Browser-based Codespaces/OpenSSL scripts prepare the CSR and encrypted P12, so
+certificate setup does not require a Mac. The app and Safari extension have
+separate profiles but matching Team ID, App Group, version, and build number.
+Identifiers and profile selectors are per-target build settings, avoiding a
+global bundle-ID or profile override that would break the extension.
+
+The runner is macOS 26 with explicit Xcode 26.6, checked against official
+`actions/runner-images` revision `4da2307112a0fad2fd2ecaca8ba7d08683b8c581`.
+Apple's current upload requirement page was blocked, so no claim of independently
+verified submission eligibility is made. Actual native build/archive/upload
+remain separate gates. An opaque AppIcon asset and the required-reason
+UserDefaults privacy manifest are now included. Privacy declarations in
+App Store Connect remain a separate step when configuring the app record.

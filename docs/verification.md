@@ -67,3 +67,27 @@ Demo fixtures and portable tests do not satisfy the Live or device gates.
   clears them. Durable learning/source state belongs to the device.
 
 No public deployment, billing change, or App Store submission was performed.
+
+## Cloud build / TestFlight preparation
+
+Added a manual cloud workflow with pinned macOS/Xcode, unsigned validation by
+default, optional signed archive, and explicit internal TestFlight upload. The
+app now has a 1024×1024 RGB AppIcon, shared app/extension version settings,
+configurable bundle/profile identifiers, and a UserDefaults required-reason
+privacy manifest. YAML, plist/privacy/asset JSON, PNG dimensions/color type, and
+shell syntax were checked on Linux. See `docs/testflight.md` for enrollment,
+browser-based certificate preparation, secure GitHub settings, and installation.
+
+`python3 -m unittest discover -s scripts/testflight -p 'test_*.py'` passed all 15
+release-preparation tests. These exercise profile/team/bundle/group/certificate
+and expiry checks, signed-entitlement and IPA-package validation, real OpenSSL
+CSR/P12 round trips, overwrite refusal, wrong-certificate rejection, and redacted
+failure diagnostics. Test certificates are local self-signed fixtures; they do
+not establish successful Apple signing or macOS Keychain import.
+
+Enrollment and Apple signing/upload credentials are not available in this task.
+The workflow has not produced a verified native archive or uploaded a build.
+GitHub API access is currently denied, so remote build results are unobserved.
+An `api.github.com` network addition was saved to the environment configuration
+draft; it requires the user to review/save and publish the environment before it
+applies. No signing secrets were requested in chat or added to this environment.

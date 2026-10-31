@@ -18,6 +18,8 @@ jobs:
       - run: npm run build --prefix server
       - run: npm test --prefix server
       - run: npm run smoke --prefix server
+      - name: Signing and TestFlight preparation tests
+        run: python3 -m unittest discover -s scripts/testflight -p 'test_*.py'
       - run: node scripts/evals/run.test.mjs
       - run: node scripts/test-share.mjs
       - run: node scripts/build-share.mjs --check
@@ -29,9 +31,12 @@ jobs:
       - name: Live HTTP adapter tests (portable overlay)
         run: bash scripts/test-live-client.sh
   ios:
-    runs-on: macos-15
+    runs-on: macos-26
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - run: xcodebuild -version
       - run: bash scripts/generate-project.sh
       - name: Simulator build and tests (no signing)
         shell: bash

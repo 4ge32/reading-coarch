@@ -14,6 +14,12 @@ Validation: all 85 portable core, backend, import, evaluation harness, and HTTP
 adapter tests pass; local HTTP/cancellation smoke tests pass. iOS source syntax parses.
 See `docs/verification.md` for commands, counts, and exact boundaries.
 
+Also prepares cloud iPhone builds and internal TestFlight delivery for a user
+without a Mac: manual upload gating, separate app/extension signing profiles,
+browser-terminal CSR/P12 helpers, AppIcon/privacy packaging, and 15 passing
+release-preparation tests. Enrollment and signing/upload credentials remain
+required; no signed archive or TestFlight upload has been run.
+
 Keep this PR as a draft: Xcode build/Simulator, signing/App Groups, physical-device
 audio/Safari integration, and Live provider calls and semantic review have not
 been run in this Linux task. These gates are documented in `docs/manual-test.md`.

@@ -6,6 +6,12 @@ The v0.1 implementation is being developed in draft PR #1 on
 `codex/reading-coach-v0-1`. The acceptance specification is [CODEX_TASK.md](CODEX_TASK.md).
 Interface and tutor feedback are in Japanese; reading materials are English.
 
+To install on an iPhone without a Mac, follow the
+[cloud build and internal TestFlight guide](docs/testflight.md). It requires an
+active paid Apple Developer membership and your own signing configuration.
+The workflow defaults to unsigned Simulator validation; uploading requires an
+explicit action. No build has been distributed yet.
+
 ## Demo on iPhone / Simulator
 
 Requires macOS, Xcode 16.4 or later, and an iOS 17+ target. Project generation

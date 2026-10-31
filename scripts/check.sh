@@ -2,6 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 git diff --check
+python3 -m unittest discover -s scripts/testflight -p 'test_*.py'
 npm --prefix server run build
 npm --prefix server test
 node scripts/evals/run.test.mjs

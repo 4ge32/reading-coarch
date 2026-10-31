@@ -1,0 +1,94 @@
+name: iPhone build and TestFlight
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_signed_ipa:
+        description: Build a signed iPhone IPA (requires the testflight environment)
+        type: boolean
+        default: false
+      upload_to_testflight:
+        description: Upload the signed build for internal TestFlight testing
+        type: boolean
+        default: false
+      version:
+        description: App version (major.minor.patch)
+        type: string
+        default: '0.1.0'
+      build_number:
+        description: Optional build number; otherwise run-number.run-attempt
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: testflight-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Unsigned Simulator checks
+    runs-on: macos-26
+    timeout-minutes: 35
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Confirm selected Apple toolchain
+        run: xcodebuild -version
+      - run: python3 -m unittest discover -s scripts/testflight -p 'test_*.py'
+      - run: bash scripts/generate-project.sh
+      - name: Test on an available iPhone Simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          device_id=$(xcrun simctl list devices available -j | python3 -c 'import json,sys; d=json.load(sys.stdin); print(next(x["udid"] for devices in d["devices"].values() for x in devices if "iPhone" in x["name"]))')
+          xcodebuild test -project ios/ReadingCoach.xcodeproj -scheme ReadingCoach \
+            -destination "platform=iOS Simulator,id=$device_id" \
+            -derivedDataPath DerivedData CODE_SIGNING_ALLOWED=NO
+
+  signed_build:
+    name: Signed iPhone build (optional TestFlight upload)
+    if: ${{ inputs.build_signed_ipa || inputs.upload_to_testflight }}
+    needs: validate
+    runs-on: macos-26
+    timeout-minutes: 35
+    environment: testflight
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+      APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
+      APP_BUNDLE_ID: ${{ vars.APP_BUNDLE_ID }}
+      APP_GROUP_ID: ${{ vars.APP_GROUP_ID }}
+      APP_VERSION: ${{ inputs.version }}
+      APP_BUILD_NUMBER: ${{ inputs.build_number || format('{0}.{1}', github.run_number, github.run_attempt) }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Generate project
+        run: bash scripts/generate-project.sh
+      - name: Archive, validate and export the signed iPhone app
+        env:
+          DISTRIBUTION_CERTIFICATE_P12_BASE64: ${{ secrets.DISTRIBUTION_CERTIFICATE_P12_BASE64 }}
+          DISTRIBUTION_CERTIFICATE_PASSWORD: ${{ secrets.DISTRIBUTION_CERTIFICATE_PASSWORD }}
+          APP_PROVISION_PROFILE_BASE64: ${{ secrets.APP_PROVISION_PROFILE_BASE64 }}
+          SHARE_PROVISION_PROFILE_BASE64: ${{ secrets.SHARE_PROVISION_PROFILE_BASE64 }}
+        run: bash scripts/testflight/archive.sh
+      - name: Retain signed IPA for inspection (not direct installation)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ReadingCoach-iPhone-${{ github.run_number }}-${{ github.run_attempt }}
+          path: build/testflight/ReadingCoach.ipa
+          if-no-files-found: error
+          retention-days: 3
+      - name: Upload for internal TestFlight testing
+        if: ${{ inputs.upload_to_testflight }}
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY_P8: ${{ secrets.ASC_PRIVATE_KEY_P8 }}
+        run: bash scripts/testflight/upload.sh
+      - name: Remove local release outputs
+        if: always()
+        shell: bash
+        run: rm -rf -- build/testflight
