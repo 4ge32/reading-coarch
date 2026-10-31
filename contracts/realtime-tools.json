@@ -1,0 +1,482 @@
+[
+  {
+    "type": "function",
+    "name": "get_source_context",
+    "description": "Get saved original context; no URL access.",
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runID": {
+          "type": "string"
+        },
+        "stateRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceRef": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "articleID": {
+              "type": "string"
+            },
+            "snapshotID": {
+              "type": "string"
+            },
+            "blockID": {
+              "type": "string"
+            },
+            "sentenceID": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "rangeUTF16": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "location": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "length": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "location",
+                    "length"
+                  ]
+                }
+              ]
+            }
+          },
+          "required": [
+            "articleID",
+            "snapshotID",
+            "blockID",
+            "sentenceID",
+            "rangeUTF16"
+          ]
+        }
+      },
+      "required": [
+        "runID",
+        "stateRevision",
+        "sourceRef"
+      ]
+    }
+  },
+  {
+    "type": "function",
+    "name": "play_source",
+    "description": "Read saved original using native TTS.",
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runID": {
+          "type": "string"
+        },
+        "stateRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceRef": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "articleID": {
+              "type": "string"
+            },
+            "snapshotID": {
+              "type": "string"
+            },
+            "blockID": {
+              "type": "string"
+            },
+            "sentenceID": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "rangeUTF16": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "location": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "length": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "location",
+                    "length"
+                  ]
+                }
+              ]
+            }
+          },
+          "required": [
+            "articleID",
+            "snapshotID",
+            "blockID",
+            "sentenceID",
+            "rangeUTF16"
+          ]
+        }
+      },
+      "required": [
+        "runID",
+        "stateRevision",
+        "sourceRef"
+      ]
+    }
+  },
+  {
+    "type": "function",
+    "name": "navigate",
+    "description": "Move within the app-owned run; never mark understood.",
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runID": {
+          "type": "string"
+        },
+        "stateRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "next",
+            "previous",
+            "return_to_reader"
+          ]
+        }
+      },
+      "required": [
+        "runID",
+        "stateRevision",
+        "direction"
+      ]
+    }
+  },
+  {
+    "type": "function",
+    "name": "mark_unclear",
+    "description": "Locally mark a valid original sentence.",
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runID": {
+          "type": "string"
+        },
+        "stateRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceRef": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "articleID": {
+              "type": "string"
+            },
+            "snapshotID": {
+              "type": "string"
+            },
+            "blockID": {
+              "type": "string"
+            },
+            "sentenceID": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "rangeUTF16": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "location": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "length": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "location",
+                    "length"
+                  ]
+                }
+              ]
+            }
+          },
+          "required": [
+            "articleID",
+            "snapshotID",
+            "blockID",
+            "sentenceID",
+            "rangeUTF16"
+          ]
+        }
+      },
+      "required": [
+        "runID",
+        "stateRevision",
+        "sourceRef"
+      ]
+    }
+  },
+  {
+    "type": "function",
+    "name": "set_wait_mode",
+    "description": "Set or explicitly release ThinkingHold.",
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runID": {
+          "type": "string"
+        },
+        "stateRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "runID",
+        "stateRevision",
+        "enabled"
+      ]
+    }
+  },
+  {
+    "type": "function",
+    "name": "request_assessment",
+    "description": "Request shared text assessment for a confirmed meaning answer.",
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runID": {
+          "type": "string"
+        },
+        "stateRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceRef": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "articleID": {
+              "type": "string"
+            },
+            "snapshotID": {
+              "type": "string"
+            },
+            "blockID": {
+              "type": "string"
+            },
+            "sentenceID": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "rangeUTF16": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "location": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "length": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "location",
+                    "length"
+                  ]
+                }
+              ]
+            }
+          },
+          "required": [
+            "articleID",
+            "snapshotID",
+            "blockID",
+            "sentenceID",
+            "rangeUTF16"
+          ]
+        },
+        "answer": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "runID",
+        "stateRevision",
+        "sourceRef",
+        "answer"
+      ]
+    }
+  },
+  {
+    "type": "function",
+    "name": "create_practice",
+    "description": "Request a distinctly labelled generated example.",
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runID": {
+          "type": "string"
+        },
+        "stateRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceRef": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "articleID": {
+              "type": "string"
+            },
+            "snapshotID": {
+              "type": "string"
+            },
+            "blockID": {
+              "type": "string"
+            },
+            "sentenceID": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "rangeUTF16": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "location": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "length": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "location",
+                    "length"
+                  ]
+                }
+              ]
+            }
+          },
+          "required": [
+            "articleID",
+            "snapshotID",
+            "blockID",
+            "sentenceID",
+            "rangeUTF16"
+          ]
+        },
+        "bottleneck": {
+          "type": "string",
+          "enum": [
+            "vocabulary",
+            "syntax",
+            "reference",
+            "logicalRelation",
+            "context",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "runID",
+        "stateRevision",
+        "sourceRef",
+        "bottleneck"
+      ]
+    }
+  },
+  {
+    "type": "function",
+    "name": "finish_session",
+    "description": "Finish only with explicit learner intent; not proof of understanding.",
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runID": {
+          "type": "string"
+        },
+        "stateRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "explicitUserIntent": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "required": [
+        "runID",
+        "stateRevision",
+        "explicitUserIntent"
+      ]
+    }
+  }
+]

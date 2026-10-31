@@ -1,0 +1,43 @@
+name: Check
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  portable:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      - run: npm ci --prefix server
+      - run: npm run build --prefix server
+      - run: npm test --prefix server
+      - run: npm run smoke --prefix server
+      - run: node scripts/evals/run.test.mjs
+      - run: node scripts/test-share.mjs
+      - run: node scripts/build-share.mjs --check
+      - name: ReadingCore tests
+        run: >-
+          docker run --rm -v "$PWD:/workspace" -w /workspace
+          swift:6.1.2-jammy@sha256:5910655d205a5a54b0b9efdf72c4066a8de1932513fdc81793e2544b5d5a0709
+          swift test --package-path packages/ReadingCore --jobs 4
+      - name: Live HTTP adapter tests (portable overlay)
+        run: bash scripts/test-live-client.sh
+  ios:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - run: bash scripts/generate-project.sh
+      - name: Simulator build and tests (no signing)
+        shell: bash
+        run: |
+          set -euo pipefail
+          device_id=$(xcrun simctl list devices available -j | python3 -c 'import json,sys; d=json.load(sys.stdin); print(next(x["udid"] for devices in d["devices"].values() for x in devices if "iPhone" in x["name"]))')
+          xcodebuild test -project ios/ReadingCoach.xcodeproj -scheme ReadingCoach \
+            -destination "platform=iOS Simulator,id=$device_id" \
+            -derivedDataPath DerivedData CODE_SIGNING_ALLOWED=NO

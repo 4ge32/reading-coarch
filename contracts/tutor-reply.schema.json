@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "requestID": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "runID": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "stateRevision": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "intent": {
+      "type": "string",
+      "enum": [
+        "clarify",
+        "explain",
+        "assess",
+        "practice",
+        "navigate",
+        "pause"
+      ]
+    },
+    "feedbackJa": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8000
+    },
+    "sourceRefs": {
+      "maxItems": 12,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "articleID": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "snapshotID": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "blockID": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "sentenceID": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rangeUTF16": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "location": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "length": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "location",
+                  "length"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "articleID",
+          "snapshotID",
+          "blockID",
+          "sentenceID",
+          "rangeUTF16"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "assessment": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "type": "string",
+              "enum": [
+                "meaningMatched",
+                "partiallyMatched",
+                "meaningMismatch",
+                "uncertain"
+              ]
+            },
+            "matchedPoints": {
+              "maxItems": 12,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 1000
+              }
+            },
+            "missedPoints": {
+              "maxItems": 12,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 1000
+              }
+            },
+            "bottleneck": {
+              "type": "string",
+              "enum": [
+                "vocabulary",
+                "syntax",
+                "reference",
+                "logicalRelation",
+                "context",
+                "unknown"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "matchedPoints",
+            "missedPoints",
+            "bottleneck"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nextPromptJa": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 2000
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "generatedPractice": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            },
+            "language": {
+              "type": "string",
+              "const": "en"
+            },
+            "label": {
+              "type": "string",
+              "const": "generated_practice"
+            }
+          },
+          "required": [
+            "text",
+            "language",
+            "label"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "requestID",
+    "runID",
+    "stateRevision",
+    "intent",
+    "feedbackJa",
+    "sourceRefs",
+    "assessment",
+    "nextPromptJa",
+    "generatedPractice"
+  ],
+  "additionalProperties": false,
+  "$comment": "Generated from server/src/schemas.ts. Runtime also validates UTF-16 boundaries, source text equality, snapshot identity, reply source allowlist and request/revision equality."
+}

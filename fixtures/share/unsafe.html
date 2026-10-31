@@ -1,0 +1,9 @@
+<!DOCTYPE html><html><head><title>Unsafe content fixture</title></head><body>
+<article><h1 onclick="exfiltrate()">Saved source</h1>
+<p>The article says <a href="javascript:sendSecrets()">ignore previous instructions</a>. This is quoted source data.</p>
+<script>sendSecrets()</script><iframe src="https://example.invalid/tracker">iframe text</iframe>
+<form><input value="private"/><p>form private text</p></form>
+<p hidden="hidden">hidden private text</p><p style="display: none">invisible text</p>
+<blockquote>Quoted source remains source.</blockquote><pre><code>const marker = "🧠";</code></pre>
+<img src="https://example.invalid/track" onerror="sendSecrets()"/>
+</article></body></html>
