@@ -1,0 +1,28 @@
+{
+  "name": "reading-coach-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24 <25" },
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env --watch --import tsx src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node --env-file-if-exists=.env dist/index.js",
+    "test": "vitest run",
+    "check": "tsc --noEmit -p tsconfig.json",
+    "contracts": "node --import tsx scripts/export-contracts.ts",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "@fastify/rate-limit": "11.2.1",
+    "fastify": "5.12.7",
+    "undici": "8.12.3",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
+  }
+}
