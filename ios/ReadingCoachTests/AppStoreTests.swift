@@ -10,6 +10,21 @@ final class AppStoreTests: XCTestCase {
         return (ReadingStore(context: container.mainContext), container)
     }
 
+    func testStoreRetainsContainerAfterFactoryReturns() throws {
+        weak var containerReference: ModelContainer?
+        let store: ReadingStore = try {
+            let container = try ModelContainer(for: StoredArticle.self, ProcessedImport.self, URLBookmark.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+            containerReference = container
+            return ReadingStore(context: container.mainContext)
+        }()
+        XCTAssertNotNil(containerReference)
+        let article = try store.add(title: "Sample", sourceURL: nil, blocks: [(.paragraph, "One sentence.")])
+        let ref = try SourceResolver(snapshot: article.snapshot()).allSentenceRefs[0]
+        store.toggleMark(ref, article: article)
+        XCTAssertEqual(store.activity(article).marks.filter(\.active).count, 1)
+        withExtendedLifetime(store) {}
+    }
+
     func testMarkTogglingIsLocalAndKeepsConversationEmpty() throws {
         let (store, _) = try makeStore()
         let article = try store.add(title: "Sample", sourceURL: nil, blocks: [(.paragraph, "A sentence. Another sentence.")])

@@ -68,6 +68,17 @@ Demo fixtures and portable tests do not satisfy the Live or device gates.
 
 No public deployment, billing change, or App Store submission was performed.
 
+## CI investigation — 2026-11-01
+
+The PR's `Check` run 41198399400 compiled the iOS targets, but failed during
+Simulator testing. Four `AppStoreTests` ended in unexpected process exits;
+the test retaining its `ModelContainer`, the other 20 unit tests, and the UI
+test passed. The portable job passed. The failure does not establish a root
+cause on its own. `ReadingStore` now retains its context's `ModelContainer`,
+and a lifetime regression test exercises use after the factory returns. The
+corrected iOS CI must still run successfully; do not infer success from this
+change. Device, signed archive, and TestFlight remain separate gates.
+
 ## Cloud build / TestFlight preparation
 
 Added a manual cloud workflow with pinned macOS/Xcode, unsigned validation by

@@ -11,6 +11,8 @@ final class ReadingStore: ObservableObject {
     @Published var pendingImports: [ImportJob] = []
     @Published var selectedArticleID: String?
     @Published var undoAvailable = false
+    // Keep the container alive for as long as its context and model objects are used.
+    private let container: ModelContainer?
     private let context: ModelContext?
     private var undoMark: (String, SourceRef)?
     private var timingStart: Date?
@@ -18,6 +20,7 @@ final class ReadingStore: ObservableObject {
     private var timingArticle: String?
 
     init(context: ModelContext?, initializationError: String? = nil) {
+        self.container = context?.container
         self.context = context
         self.errorMessage = initializationError
         reload()
