@@ -75,9 +75,12 @@ Simulator testing. Four `AppStoreTests` ended in unexpected process exits;
 the test retaining its `ModelContainer`, the other 20 unit tests, and the UI
 test passed. The portable job passed. The failure does not establish a root
 cause on its own. `ReadingStore` now retains its context's `ModelContainer`,
-and a lifetime regression test exercises use after the factory returns. The
-corrected iOS CI must still run successfully; do not infer success from this
-change. Device, signed archive, and TestFlight remain separate gates.
+and a lifetime regression test exercises use after the factory returns. On
+commit `bfeb76b5a2535094ee94e5279ee31611295860c6`, the push-triggered Check
+run 41312804965 passed: all 26 iOS unit tests, including the formerly failing
+tests and the new regression, and the UI test passed. The portable job also
+passed. Later commits still require their own CI results. Device, signed
+archive, and TestFlight remain separate gates.
 
 ## Cloud build / TestFlight preparation
 

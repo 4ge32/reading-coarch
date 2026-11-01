@@ -4,9 +4,10 @@ This route uses GitHub's macOS runner to build and sign the native app, and Appl
 TestFlight app to install it. Start with Demo: it does not need a backend or an
 OpenAI key. Live text/voice setup is separate and described in the root README.
 
-The repository now includes the workflow and preparation scripts. An actual
-signed build and TestFlight upload have **not** run: enrollment, signing files,
-and App Store Connect access are still required. Unsigned Simulator artifacts
+The repository includes the workflow and preparation scripts. An actual signed
+build and TestFlight upload have **not** been observed. The developer account is
+enrolled; the identifiers, signing files, GitHub secrets, and App Store Connect
+records still need to be checked before distribution. Unsigned Simulator artifacts
 and downloaded App Store IPAs cannot be installed by tapping them on your iPhone.
 
 ## 1. Enroll and create the app records
@@ -15,13 +16,14 @@ Enroll in the [Apple Developer Program](https://developer.apple.com/programs/enr
 Once membership is active, use the Developer website and App Store Connect in a
 browser. Accept any pending developer agreements.
 
-Register these identifiers, replacing the example prefix with your own:
+Verify that these identifiers are registered for the selected Apple team:
 
-| Item | Example |
+| Item | Value |
 | --- | --- |
-| Main app bundle ID | `com.yourname.readingcoach` |
-| Share extension bundle ID | `com.yourname.readingcoach.Share` |
-| App Group | `group.com.yourname.readingcoach` |
+| Apple Team ID | `MFD926L2J2` |
+| Main app bundle ID | `com.4ge32.readingcoach` |
+| Share extension bundle ID | `com.4ge32.readingcoach.Share` |
+| App Group | `group.com.4ge32.readingcoach` |
 
 Enable the App Groups capability on **both** explicit bundle IDs and attach the
 same group to both. Find your 10-character Team ID in your Developer membership
@@ -71,13 +73,14 @@ deliberate approval; configure it so your intended operator can approve runs.
 Restrict that environment's deployment branches to your trusted default branch.
 Run signing only from reviewed workflow/script code on that branch.
 
-Add these environment **variables**:
+The project and workflow default to the identifiers above. These optional
+environment **variables**, if set, override the workflow defaults:
 
 | Name | Value |
 | --- | --- |
-| `APPLE_TEAM_ID` | Your 10-character Team ID |
-| `APP_BUNDLE_ID` | Registered main bundle ID, e.g. `com.yourname.readingcoach` |
-| `APP_GROUP_ID` | Registered group, e.g. `group.com.yourname.readingcoach` |
+| `APPLE_TEAM_ID` | `MFD926L2J2` |
+| `APP_BUNDLE_ID` | `com.4ge32.readingcoach` |
+| `APP_GROUP_ID` | `group.com.4ge32.readingcoach` |
 
 Add these environment **secrets**, never repository files or chat messages:
 
