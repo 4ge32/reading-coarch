@@ -32,7 +32,7 @@ Those tests cover HTTPS configuration, authentication/quota/rate/timeout errors,
 expired credentials, stale replies, invalid citations/UTF-16 ranges, and labeled
 generated practice. Native XCTest and UI tests still require Xcode.
 
-## Gates unavailable in this task
+## Gates unavailable in the initial implementation — 2026-10-31
 
 - Xcode build and Simulator: Linux host, no Xcode/Apple SDKs. CI is provided but
   has not been observed running.
@@ -45,7 +45,7 @@ generated practice. Native XCTest and UI tests still require Xcode.
 The checklist in `manual-test.md` defines the remaining device checks. Runnable
 Demo fixtures and portable tests do not satisfy the Live or device gates.
 
-## Implementation limits and next checks
+## Initial implementation limits and next checks — 2026-10-31
 
 - Draft code includes real HTTP/SDP/peer connection/data-channel and microphone
   paths. Their presence and syntax parsing do **not** prove working end-to-end
@@ -82,7 +82,7 @@ tests and the new regression, and the UI test passed. The portable job also
 passed. Later commits still require their own CI results. Device, signed
 archive, and TestFlight remain separate gates.
 
-## Cloud build / TestFlight preparation
+## Initial cloud build / TestFlight preparation — 2026-10-31
 
 Added a manual cloud workflow with pinned macOS/Xcode, unsigned validation by
 default, optional signed archive, and explicit internal TestFlight upload. The
@@ -99,9 +99,8 @@ CSR/P12 round trips, overwrite refusal, wrong-certificate rejection, and redacte
 failure diagnostics. Test certificates are local self-signed fixtures; they do
 not establish successful Apple signing or macOS Keychain import.
 
-Enrollment and Apple signing/upload credentials are not available in this task.
-The workflow has not produced a verified native archive or uploaded a build.
-GitHub API access is currently denied, so remote build results are unobserved.
-An `api.github.com` network addition was saved to the environment configuration
-draft; it requires the user to review/save and publish the environment before it
-applies. No signing secrets were requested in chat or added to this environment.
+At that time enrollment and Apple signing/upload credentials were unavailable,
+and GitHub API access was denied. The user has since confirmed enrollment;
+subsequent CI observations are recorded above. A signed archive and TestFlight
+upload remain unverified. No signing secrets were requested in chat or added to
+this execution environment.
