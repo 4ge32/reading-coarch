@@ -114,6 +114,8 @@ def validate_ipa(path, config):
                 raise ConfigurationError("Exported app/extension versions do not match the selected release.")
             if info.get("ReadingCoachAppGroupIdentifier") != config["group"]:
                 raise ConfigurationError("Exported app/extension uses an unexpected App Group.")
+            if info.get("UIDeviceFamily") != [1]:
+                raise ConfigurationError("Exported app and share extension must target iPhone only.")
             embedded = info_path.removesuffix("Info.plist") + "embedded.mobileprovision"
             if embedded not in archive.namelist():
                 raise ConfigurationError("Exported app/extension is missing an embedded distribution profile.")

@@ -117,3 +117,17 @@ signed IPA was retained as a GitHub Actions artifact with a three-day expiry.
 The upload step was deliberately skipped. App Store Connect processing, internal
 TestFlight installation, physical-device behavior, and Live API calls remain
 unverified. This result is not an App Store submission or public release.
+
+## First TestFlight upload attempt — 2026-11-03
+
+[Workflow run 41652754280](https://github.com/4ge32/reading-coarch/actions/runs/41652754280)
+passed Simulator tests, archived and validated a signed IPA, and attempted an
+internal TestFlight upload. Apple rejected it with error 90474 because the exported
+app advertised iPad support without all required iPad orientations. Inspection of
+the archived IPA found `UIDeviceFamily` `[1, 2]` in both app and share extension,
+despite the project-level iPhone-only setting.
+
+The project now explicitly sets the device family on both targets, overriding the
+XcodeGen target preset. IPA validation rejects an app or share extension that is
+not iPhone-only. A successful upload, processing, and iPhone installation have not
+yet been observed.
