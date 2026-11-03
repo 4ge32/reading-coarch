@@ -97,7 +97,8 @@ class ReleaseConfigurationTests(unittest.TestCase):
         for base, bundle in [("Payload/ReadingCoach.app/", self.config["bundle"]),
                              ("Payload/ReadingCoach.app/PlugIns/ReadingCoachShare.appex/", self.config["shareBundle"])]:
             info = {"CFBundleIdentifier": bundle, "CFBundleVersion": self.config["build"],
-                    "CFBundleShortVersionString": self.config["version"], "ReadingCoachAppGroupIdentifier": self.config["group"]}
+                    "CFBundleShortVersionString": self.config["version"], "ReadingCoachAppGroupIdentifier": self.config["group"],
+                    "UIDeviceFamily": [1]}
             if bundle == self.config["bundle"]:
                 info["CFBundleIcons"] = {"CFBundlePrimaryIcon": {"CFBundleIconName": "AppIcon"}}
             entries[base + "Info.plist"] = plistlib.dumps(info)
@@ -128,6 +129,19 @@ class ReleaseConfigurationTests(unittest.TestCase):
             self.make_ipa(path, wrong_version)
             with self.assertRaises(release.ConfigurationError):
                 release.validate_ipa(path, self.config)
+
+    def test_exported_ipa_rejects_unintended_ipad_target_for_app_and_extension(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "app.ipa"
+            for info_path in ["Payload/ReadingCoach.app/Info.plist",
+                              "Payload/ReadingCoach.app/PlugIns/ReadingCoachShare.appex/Info.plist"]:
+                def add_ipad(entries):
+                    info = plistlib.loads(entries[info_path])
+                    info["UIDeviceFamily"] = [1, 2]
+                    entries[info_path] = plistlib.dumps(info)
+                self.make_ipa(path, add_ipad)
+                with self.subTest(info_path=info_path), self.assertRaisesRegex(release.ConfigurationError, "iPhone only"):
+                    release.validate_ipa(path, self.config)
 
 
 class SigningPreparationTests(unittest.TestCase):

@@ -37,6 +37,8 @@ targets:
         embed: true
     settings:
       base:
+        # XcodeGen's iOS target preset overrides the project-level device family.
+        TARGETED_DEVICE_FAMILY: '1'
         PRODUCT_BUNDLE_IDENTIFIER: $(READINGCOACH_BUNDLE_ID)
         PROVISIONING_PROFILE_SPECIFIER: $(READINGCOACH_APP_PROFILE)
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -71,6 +73,7 @@ targets:
       - path: Shared
     settings:
       base:
+        TARGETED_DEVICE_FAMILY: '1'
         PRODUCT_BUNDLE_IDENTIFIER: $(READINGCOACH_BUNDLE_ID).Share
         PROVISIONING_PROFILE_SPECIFIER: $(READINGCOACH_SHARE_PROFILE)
         INFOPLIST_FILE: ReadingCoachShare/Info.plist
