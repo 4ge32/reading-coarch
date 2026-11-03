@@ -139,3 +139,13 @@ Simulator tests, signed and validated an iPhone-only app and share extension,
 and completed the internal TestFlight upload step. Apple accepted the upload.
 App Store Connect processing and installation on an iPhone were not yet verified
 at the time of the upload. No public App Store submission was performed.
+
+## Apple processing rejection — 2026-11-03
+
+After accepting the upload, Apple rejected build `0.1.0 (5.1)` during processing
+with `ITMS-90683`: the app was missing `NSCameraUsageDescription`. The bundled
+WebRTC framework contains camera APIs, although the app's voice session creates
+an audio track and does not use the camera. The project now includes an accurate
+description, and IPA validation requires nonempty camera and microphone usage
+descriptions. A corrected upload, successful processing, and installation on a
+physical device have not yet been observed.

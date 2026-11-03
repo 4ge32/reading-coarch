@@ -10,8 +10,11 @@ successfully produced and validated a signed IPA for the registered app and shar
 extension. A later upload was rejected because the IPA unexpectedly targeted iPad;
 see `docs/verification.md`. After correcting that setting,
 [workflow run 41657747673](https://github.com/4ge32/reading-coarch/actions/runs/41657747673)
-successfully uploaded an iPhone-only build to Apple. App Store Connect processing
-and physical-device testing were not yet verified at the time of the upload.
+successfully uploaded an iPhone-only build to Apple, but Apple's later processing
+rejected it with ITMS-90683 because the app lacked a camera usage description.
+The audio library includes camera APIs; ReadingCoach does not use its camera.
+The description is now supplied and IPA validation checks the media privacy
+descriptions. A corrected upload and physical-device testing are not yet verified.
 Unsigned Simulator artifacts and downloaded App Store IPAs cannot be installed by
 tapping them on your iPhone.
 

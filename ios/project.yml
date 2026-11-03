@@ -51,6 +51,7 @@ targets:
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         ITSAppUsesNonExemptEncryption: false
+        NSCameraUsageDescription: 音声会話用ライブラリにはカメラ機能が含まれますが、ReadingCoachではカメラを使用しません。
         NSMicrophoneUsageDescription: 選んだ英文について音声で相談するためにマイクを使います。Liveでは音声を外部APIに送信します。
         ReadingCoachAppGroupIdentifier: $(READINGCOACH_APP_GROUP)
         UILaunchScreen: {}
