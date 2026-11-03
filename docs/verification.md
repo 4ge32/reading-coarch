@@ -149,3 +149,16 @@ an audio track and does not use the camera. The project now includes an accurate
 description, and IPA validation requires nonempty camera and microphone usage
 descriptions. A corrected upload, successful processing, and installation on a
 physical device have not yet been observed.
+
+## Corrected internal TestFlight build — 2026-11-03
+
+[Workflow run 41662481404](https://github.com/4ge32/reading-coarch/actions/runs/41662481404)
+attempt 1 passed all 26 iOS unit tests but its UI test timed out while Xcode was
+launching the app, so the signed job was skipped. A retry on attempt 2 passed the
+Simulator tests, exported and validated a signed iPhone-only IPA, and uploaded
+build `0.1.0 (6.2)` to Apple. App Store Connect showed the upload as complete and
+the build as ready to test; it was added to the existing `Internal Testing` group,
+which showed one tester, one build, and the tester as invited.
+
+The actual installation and behavior on a physical iPhone have not yet been
+verified. No public App Store submission was performed.

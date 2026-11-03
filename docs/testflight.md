@@ -14,7 +14,10 @@ successfully uploaded an iPhone-only build to Apple, but Apple's later processin
 rejected it with ITMS-90683 because the app lacked a camera usage description.
 The audio library includes camera APIs; ReadingCoach does not use its camera.
 The description is now supplied and IPA validation checks the media privacy
-descriptions. A corrected upload and physical-device testing are not yet verified.
+descriptions. [Workflow run 41662481404](https://github.com/4ge32/reading-coarch/actions/runs/41662481404)
+subsequently uploaded build `0.1.0 (6.2)`; Apple completed processing and the build
+was added to the `Internal Testing` group. Its single tester was shown as invited.
+Installation and physical-device testing are not yet verified.
 Unsigned Simulator artifacts and downloaded App Store IPAs cannot be installed by
 tapping them on your iPhone.
 
