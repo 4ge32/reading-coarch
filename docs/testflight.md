@@ -4,11 +4,12 @@ This route uses GitHub's macOS runner to build and sign the native app, and Appl
 TestFlight app to install it. Start with Demo: it does not need a backend or an
 OpenAI key. Live text/voice setup is separate and described in the root README.
 
-The repository includes the workflow and preparation scripts. An actual signed
-build and TestFlight upload have **not** been observed. The developer account is
-enrolled; the identifiers, signing files, GitHub secrets, and App Store Connect
-records still need to be checked before distribution. Unsigned Simulator artifacts
-and downloaded App Store IPAs cannot be installed by tapping them on your iPhone.
+The repository includes the workflow and preparation scripts. On 2026-11-03,
+[workflow run 41646181459](https://github.com/4ge32/reading-coarch/actions/runs/41646181459)
+successfully produced and validated a signed IPA for the registered app and share
+extension. TestFlight upload and physical-device testing have **not** been observed.
+Unsigned Simulator artifacts and downloaded App Store IPAs cannot be installed by
+tapping them on your iPhone.
 
 ## 1. Enroll and create the app records
 

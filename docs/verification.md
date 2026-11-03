@@ -102,5 +102,18 @@ not establish successful Apple signing or macOS Keychain import.
 At that time enrollment and Apple signing/upload credentials were unavailable,
 and GitHub API access was denied. The user has since confirmed enrollment;
 subsequent CI observations are recorded above. A signed archive and TestFlight
-upload remain unverified. No signing secrets were requested in chat or added to
-this execution environment.
+upload were unverified at that time. No signing secrets were requested in chat or
+added to that execution environment.
+
+## Signed iPhone archive — 2026-11-03
+
+[Workflow run 41646181459](https://github.com/4ge32/reading-coarch/actions/runs/41646181459)
+on `main` commit `5ee03016bc825adacd5b97aa50cf4db9c2a17756` passed the unsigned
+iPhone Simulator tests, then archived and exported a signed IPA. The workflow
+validated the main app and share extension identifiers, App Group, embedded
+profiles, signing certificate, signed entitlements and package contents. The
+signed IPA was retained as a GitHub Actions artifact with a three-day expiry.
+
+The upload step was deliberately skipped. App Store Connect processing, internal
+TestFlight installation, physical-device behavior, and Live API calls remain
+unverified. This result is not an App Store submission or public release.
