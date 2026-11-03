@@ -20,4 +20,4 @@ openssl pkcs12 -export -inkey "$output/distribution-key.pem" -passin env:DISTRIB
   -in "$work/distribution.pem" -name 'Apple Distribution' -out "$output/distribution.p12" \
   -passout env:DISTRIBUTION_CERTIFICATE_PASSWORD \
   -keypbe PBE-SHA1-3DES -certpbe PBE-SHA1-3DES -macalg sha1 -iter 100000
-echo 'Created the encrypted distribution.p12. Store it and its password in GitHub environment secrets; never commit either.'
+echo 'Created the encrypted distribution.p12. Keep it and its password securely; see docs/testflight.md before using GitHub Actions secrets.'

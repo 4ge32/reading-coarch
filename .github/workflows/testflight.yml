@@ -51,7 +51,7 @@ jobs:
 
   signed_build:
     name: Signed iPhone build (optional TestFlight upload)
-    if: ${{ inputs.build_signed_ipa || inputs.upload_to_testflight }}
+    if: ${{ github.ref == 'refs/heads/main' && (inputs.build_signed_ipa || inputs.upload_to_testflight) }}
     needs: validate
     runs-on: macos-26
     timeout-minutes: 35
