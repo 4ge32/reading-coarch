@@ -60,7 +60,7 @@ jobs:
       DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
       APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID || 'MFD926L2J2' }}
       APP_BUNDLE_ID: ${{ vars.APP_BUNDLE_ID || 'com.4ge32.readingcoach' }}
-      APP_GROUP_ID: ${{ vars.APP_GROUP_ID || 'group.com.4ge32.readingcoach' }}
+      APP_GROUP_ID: ${{ vars.APP_GROUP_ID || 'group.com.4ge32.readingcoach.shared' }}
       APP_VERSION: ${{ inputs.version }}
       APP_BUILD_NUMBER: ${{ inputs.build_number || format('{0}.{1}', github.run_number, github.run_attempt) }}
     steps:
