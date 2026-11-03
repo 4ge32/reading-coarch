@@ -35,6 +35,11 @@ jobs:
     env:
       DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
     steps:
+      - name: Reject signed releases outside main
+        if: ${{ github.ref != 'refs/heads/main' && (inputs.build_signed_ipa || inputs.upload_to_testflight) }}
+        run: |
+          echo '::error::Signed builds and uploads must be requested from main.'
+          exit 1
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Confirm selected Apple toolchain
         run: xcodebuild -version
@@ -51,7 +56,7 @@ jobs:
 
   signed_build:
     name: Signed iPhone build (optional TestFlight upload)
-    if: ${{ inputs.build_signed_ipa || inputs.upload_to_testflight }}
+    if: ${{ github.ref == 'refs/heads/main' && (inputs.build_signed_ipa || inputs.upload_to_testflight) }}
     needs: validate
     runs-on: macos-26
     timeout-minutes: 35

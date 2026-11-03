@@ -34,7 +34,7 @@ extension is part of that app, not a separate App Store record.
 
 A Mac is not required for this step. A GitHub Codespace opened on this repository,
 or another Linux terminal with Git, OpenSSL, and GitHub CLI, can run these scripts.
-Use the `codex/reading-coach-v0-1` branch until the PR has been merged.
+Use the trusted default branch.
 
 Choose a password locally; do not send it or any key/certificate file in chat:
 
@@ -68,10 +68,25 @@ ad hoc, and enterprise profiles are not accepted by this workflow.
 ## 3. Create the GitHub environment
 
 In this repository's **Settings → Environments**, create an environment named
-`testflight`. An optional required reviewer can make signed builds require a
-deliberate approval; configure it so your intended operator can approve runs.
-Restrict that environment's deployment branches to your trusted default branch.
-Run signing only from reviewed workflow/script code on that branch.
+`testflight`. Require an environment reviewer and disable administrator bypass;
+configure it so your intended operator can approve runs. Restrict the environment's
+deployment branches to `main`, protect `main`, and run signing only after reviewing
+the workflow and scripts. A request to sign or upload outside `main` fails before
+the signed job starts; unsigned Simulator validation remains available elsewhere.
+
+These controls reduce accidental or unauthorized use, but they do not make the
+keys inaccessible to GitHub or to code running in an approved job. An administrator
+can change repository settings, and a compromised account that can approve its own
+run may approve malicious code. A GitHub Codespace is also hosted by GitHub.
+
+GitHub encrypts Actions secrets, but they remain stored until removed. The signed
+job needs the distribution private key and password at runtime; the upload step
+also needs the App Store Connect private key. A malicious workflow, compromised
+runner, or an account able to change trusted code and approve a run could expose
+them. Do not add those keys unless you accept that risk. If it is unacceptable,
+sign and upload on a machine or service you trust with the keys; a complete
+alternative workflow is not provided or verified here. In particular, an
+on-demand short-lived upload token is not yet implemented by this workflow.
 
 The project and workflow default to the identifiers above. These optional
 environment **variables**, if set, override the workflow defaults:
@@ -82,7 +97,9 @@ environment **variables**, if set, override the workflow defaults:
 | `APP_BUNDLE_ID` | `com.4ge32.readingcoach` |
 | `APP_GROUP_ID` | `group.com.4ge32.readingcoach.shared` |
 
-Add these environment **secrets**, never repository files or chat messages:
+Only if you accept the risks above, add these environment **secrets**; do not put
+the values in repository files or chat messages. Remove them when they are no
+longer needed, while preserving a separate secure backup of the identity:
 
 | Name | Contents |
 | --- | --- |
@@ -101,12 +118,15 @@ base64 < .signing/share.mobileprovision | gh secret set SHARE_PROVISION_PROFILE_
 unset DISTRIBUTION_CERTIFICATE_PASSWORD
 ```
 
-Use your repository's secure environment UI or an authorized GitHub CLI session.
+Removing a secret blocks later signed jobs until it is supplied again. Removing a
+GitHub copy does not revoke the Apple certificate or delete a separate backup.
+Use your repository's environment UI or an authorized GitHub CLI session.
 
 ## 4. Enable App Store Connect upload
 
-In App Store Connect's **Users and Access → Integrations → App Store Connect API**,
-create a team API key with permission to upload builds, such as Developer.
+Only if you accept the GitHub exposure described above, in App Store Connect's
+**Users and Access → Integrations → App Store Connect API**, create a team API
+key with permission to upload builds, such as Developer.
 The Account Holder may need to enable API access first. Download its `.p8` once
 and save it securely. Team keys apply to every app in the account within the
 selected role's permissions. This is an Apple upload key, not your OpenAI key.
@@ -154,8 +174,9 @@ build was previously uploaded from another system, enter a higher build manually
 Both app and extension receive the same version/build values. The workflow checks
 the team, exact bundle IDs, App Group, certificate membership and profile expiry.
 It imports signing files into a temporary keychain and removes local credentials
-and release outputs after the run. The upload API key is exposed only to the
-explicit upload step.
+and release outputs after the run. The upload API key is passed to the explicit
+upload step; GitHub retains the stored secret until it is removed, and that step
+can access its value.
 
 The selected runner is `macos-26` with Xcode `26.6`. This installation was verified
 in the official GitHub runner inventory. Apple's current submission requirements
