@@ -12,7 +12,7 @@ settings:
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: MFD926L2J2
     READINGCOACH_BUNDLE_ID: com.4ge32.readingcoach
-    READINGCOACH_APP_GROUP: group.com.4ge32.readingcoach
+    READINGCOACH_APP_GROUP: group.com.4ge32.readingcoach.shared
     READINGCOACH_APP_PROFILE: ''
     READINGCOACH_SHARE_PROFILE: ''
     MARKETING_VERSION: 0.1.0

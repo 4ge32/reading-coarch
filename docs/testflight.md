@@ -23,7 +23,7 @@ Verify that these identifiers are registered for the selected Apple team:
 | Apple Team ID | `MFD926L2J2` |
 | Main app bundle ID | `com.4ge32.readingcoach` |
 | Share extension bundle ID | `com.4ge32.readingcoach.Share` |
-| App Group | `group.com.4ge32.readingcoach` |
+| App Group | `group.com.4ge32.readingcoach.shared` |
 
 Enable the App Groups capability on **both** explicit bundle IDs and attach the
 same group to both. Find your 10-character Team ID in your Developer membership
@@ -80,7 +80,7 @@ environment **variables**, if set, override the workflow defaults:
 | --- | --- |
 | `APPLE_TEAM_ID` | `MFD926L2J2` |
 | `APP_BUNDLE_ID` | `com.4ge32.readingcoach` |
-| `APP_GROUP_ID` | `group.com.4ge32.readingcoach` |
+| `APP_GROUP_ID` | `group.com.4ge32.readingcoach.shared` |
 
 Add these environment **secrets**, never repository files or chat messages:
 
@@ -101,15 +101,15 @@ base64 < .signing/share.mobileprovision | gh secret set SHARE_PROVISION_PROFILE_
 unset DISTRIBUTION_CERTIFICATE_PASSWORD
 ```
 
-Use your repository's secure environment UI or an authorized GitHub CLI session;
-this cloud task does not have permission to configure your signing secrets.
+Use your repository's secure environment UI or an authorized GitHub CLI session.
 
 ## 4. Enable App Store Connect upload
 
 In App Store Connect's **Users and Access → Integrations → App Store Connect API**,
-create a team API key with permission to upload builds, such as App Manager.
+create a team API key with permission to upload builds, such as Developer.
 The Account Holder may need to enable API access first. Download its `.p8` once
-and save it securely. This is an Apple upload key, not your OpenAI key.
+and save it securely. Team keys apply to every app in the account within the
+selected role's permissions. This is an Apple upload key, not your OpenAI key.
 
 Add these secrets to the same GitHub `testflight` environment:
 
@@ -135,8 +135,8 @@ macOS Simulator build/test. Resolve build failures before distribution. The
 TestFlight workflow also requires its own successful Simulator job before signing.
 
 GitHub displays the **Run workflow** button for `workflow_dispatch` after the
-workflow file is present on the repository's default branch. Review and merge the
-PR once its checks pass; this task does not merge it automatically. Then open
+workflow file is present on the repository's default branch. Once reviewed changes
+and their checks are merged into the default branch, open
 **Actions → iPhone build and TestFlight → Run workflow**.
 
 - With both checkboxes off, it runs unsigned Simulator validation only. No Apple
