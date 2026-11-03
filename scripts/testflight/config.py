@@ -120,6 +120,10 @@ def validate_ipa(path, config):
             if embedded not in archive.namelist():
                 raise ConfigurationError("Exported app/extension is missing an embedded distribution profile.")
         app_info = plistlib.loads(archive.read(infos[0]))
+        for key in ("NSCameraUsageDescription", "NSMicrophoneUsageDescription"):
+            value = app_info.get(key)
+            if not isinstance(value, str) or not value.strip():
+                raise ConfigurationError(f"Exported application is missing a nonempty {key} privacy description.")
         icon = app_info.get("CFBundleIcons", {}).get("CFBundlePrimaryIcon", {})
         if icon.get("CFBundleIconName") != "AppIcon" or app_path + "Assets.car" not in archive.namelist():
             raise ConfigurationError("Exported application is missing its compiled AppIcon assets.")

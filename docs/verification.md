@@ -129,5 +129,23 @@ despite the project-level iPhone-only setting.
 
 The project now explicitly sets the device family on both targets, overriding the
 XcodeGen target preset. IPA validation rejects an app or share extension that is
-not iPhone-only. A successful upload, processing, and iPhone installation have not
-yet been observed.
+not iPhone-only. A successful upload had not yet been observed at that stage.
+
+## Internal TestFlight upload — 2026-11-03
+
+[Workflow run 41657747673](https://github.com/4ge32/reading-coarch/actions/runs/41657747673)
+on `main` commit `bcb05cb3db8ea00ceece324568eb2912ac76ac9a` passed the unsigned
+Simulator tests, signed and validated an iPhone-only app and share extension,
+and completed the internal TestFlight upload step. Apple accepted the upload.
+App Store Connect processing and installation on an iPhone were not yet verified
+at the time of the upload. No public App Store submission was performed.
+
+## Apple processing rejection — 2026-11-03
+
+After accepting the upload, Apple rejected build `0.1.0 (5.1)` during processing
+with `ITMS-90683`: the app was missing `NSCameraUsageDescription`. The bundled
+WebRTC framework contains camera APIs, although the app's voice session creates
+an audio track and does not use the camera. The project now includes an accurate
+description, and IPA validation requires nonempty camera and microphone usage
+descriptions. A corrected upload, successful processing, and installation on a
+physical device have not yet been observed.

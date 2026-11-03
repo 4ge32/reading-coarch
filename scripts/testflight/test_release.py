@@ -101,6 +101,8 @@ class ReleaseConfigurationTests(unittest.TestCase):
                     "UIDeviceFamily": [1]}
             if bundle == self.config["bundle"]:
                 info["CFBundleIcons"] = {"CFBundlePrimaryIcon": {"CFBundleIconName": "AppIcon"}}
+                info["NSCameraUsageDescription"] = "Camera is unused by this app."
+                info["NSMicrophoneUsageDescription"] = "Microphone is used for voice conversations."
             entries[base + "Info.plist"] = plistlib.dumps(info)
             entries[base + "embedded.mobileprovision"] = b"profile-fixture"
         entries["Payload/ReadingCoach.app/Assets.car"] = b"compiled-assets-fixture"
@@ -142,6 +144,23 @@ class ReleaseConfigurationTests(unittest.TestCase):
                 self.make_ipa(path, add_ipad)
                 with self.subTest(info_path=info_path), self.assertRaisesRegex(release.ConfigurationError, "iPhone only"):
                     release.validate_ipa(path, self.config)
+
+    def test_exported_ipa_requires_nonempty_media_privacy_descriptions(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "app.ipa"
+            for key in ("NSCameraUsageDescription", "NSMicrophoneUsageDescription"):
+                for value in (None, "", "   "):
+                    def change_description(entries):
+                        info_path = "Payload/ReadingCoach.app/Info.plist"
+                        info = plistlib.loads(entries[info_path])
+                        if value is None:
+                            info.pop(key)
+                        else:
+                            info[key] = value
+                        entries[info_path] = plistlib.dumps(info)
+                    self.make_ipa(path, change_description)
+                    with self.subTest(key=key, value=value), self.assertRaisesRegex(release.ConfigurationError, key):
+                        release.validate_ipa(path, self.config)
 
 
 class SigningPreparationTests(unittest.TestCase):
