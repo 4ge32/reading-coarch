@@ -71,7 +71,8 @@ In this repository's **Settings → Environments**, create an environment named
 `testflight`. Require an environment reviewer and disable administrator bypass;
 configure it so your intended operator can approve runs. Restrict the environment's
 deployment branches to `main`, protect `main`, and run signing only after reviewing
-the workflow and scripts. The workflow also skips its signed job outside `main`.
+the workflow and scripts. A request to sign or upload outside `main` fails before
+the signed job starts; unsigned Simulator validation remains available elsewhere.
 
 These controls reduce accidental or unauthorized use, but they do not make the
 keys inaccessible to GitHub or to code running in an approved job. An administrator
