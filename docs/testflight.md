@@ -8,8 +8,10 @@ The repository includes the workflow and preparation scripts. On 2026-11-03,
 [workflow run 41646181459](https://github.com/4ge32/reading-coarch/actions/runs/41646181459)
 successfully produced and validated a signed IPA for the registered app and share
 extension. A later upload was rejected because the IPA unexpectedly targeted iPad;
-see `docs/verification.md`. A successful TestFlight upload and physical-device
-testing have **not** been observed.
+see `docs/verification.md`. After correcting that setting,
+[workflow run 41657747673](https://github.com/4ge32/reading-coarch/actions/runs/41657747673)
+successfully uploaded an iPhone-only build to Apple. App Store Connect processing
+and physical-device testing were not yet verified at the time of the upload.
 Unsigned Simulator artifacts and downloaded App Store IPAs cannot be installed by
 tapping them on your iPhone.
 

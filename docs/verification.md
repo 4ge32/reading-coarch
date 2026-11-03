@@ -129,5 +129,13 @@ despite the project-level iPhone-only setting.
 
 The project now explicitly sets the device family on both targets, overriding the
 XcodeGen target preset. IPA validation rejects an app or share extension that is
-not iPhone-only. A successful upload, processing, and iPhone installation have not
-yet been observed.
+not iPhone-only. A successful upload had not yet been observed at that stage.
+
+## Internal TestFlight upload — 2026-11-03
+
+[Workflow run 41657747673](https://github.com/4ge32/reading-coarch/actions/runs/41657747673)
+on `main` commit `bcb05cb3db8ea00ceece324568eb2912ac76ac9a` passed the unsigned
+Simulator tests, signed and validated an iPhone-only app and share extension,
+and completed the internal TestFlight upload step. Apple accepted the upload.
+App Store Connect processing and installation on an iPhone were not yet verified
+at the time of the upload. No public App Store submission was performed.
